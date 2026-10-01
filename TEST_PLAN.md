@@ -1,0 +1,10 @@
+| method/behavior | valid case(s) | exception/invalid case(s) | boundary case | oracle/expected result | related JUnit test(s) |
+|-----------------|---------------|---------------------------|---------------|------------------------|-----------------------|
+| getSlotIndex()  | code = 0 - 3 | else throws exception | codes != 0 - 3 | returns 0 - 3 (index) based on selection | code is char |
+| addItem() | specified slot is empty | else throws exception | slot != null | itemArray[slotIndex] = item | n/a |
+| getItem() | getSlotIndex() returns 0 - 3 | n/a | if getSlotIndex() throws exception | returns item at slot index | n/a |
+| removeItem() | return item in selected slot | invalid code or slot is empty | item slot is null | return item in selected slot | n/a |
+| insertMoney() | int amount >= 1 | else throws exception | int amount < 1 | balance += amount | amount data type != int |
+| getBalance() | all | n/a | n/a | returns balance as double | balance != double data type |
+| makePurchase() | (item != null) && (balance >= item.getPrice()) | else returns false | n/a | returns boolean | n/a |
+| returnChange() | all | n/a | n/a | returns change as double | balance < 0 |
