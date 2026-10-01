@@ -1,19 +1,27 @@
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class VendingMachineTest {
     VendingMachine vm;
-    VendingMachineItem coke, drpepper;
+    VendingMachineItem coke;
+    VendingMachineItem drpepper;
+    VendingMachineItem pepsi;
+    VendingMachineItem sprite;
 
     @BeforeEach
     void setUp() {
         vm = new VendingMachine();
         coke = new VendingMachineItem("Coke", 1.5);
         drpepper = new VendingMachineItem("DrPepper", 1.75);
+        pepsi = new VendingMachineItem("Pepsi", 0);
         vm.addItem(drpepper, "B");
     }
 
@@ -23,38 +31,69 @@ public class VendingMachineTest {
     }
 
     @Test
-    void testAddItem() {
+    void testValidAddItem() {
         vm.addItem(coke, "A");
         assertEquals(coke, vm.getItem("A"));
     }
 
     @Test
-    void testGetBalance() {
-        vm.insertMoney(1.75);
-        vm.makePurchase("B");
-        assertEquals(0.0, vm.getBalance(), 0.01);
+    void testInvalidAddItem() {
+        assertThrows(VendingMachineException.class, () -> vm.addItem(coke, "b"));
     }
 
     @Test
-    void testGetItem() {
+    void testGetBalance() {
+        vm.insertMoney(2.0);
+        vm.makePurchase("B");
+        assertEquals(0.25, vm.getBalance(), 0.01);
+    }
+
+    @Test
+    void testValidGetItem() {
         assertEquals(drpepper, vm.getItem("B"));
     }
 
     @Test
-    void testInsertMoney() {
-        vm.insertMoney(1.0);
-        assertEquals(1.0, vm.getBalance(), 0.01);
+    void testInvalidGetItem() {
+        assertThrows(VendingMachineException.class, () -> vm.getItem("b"));
+    }
+
+    @ParameterizedTest 
+    @ValueSource(doubles = {1.0, 0.75, 0.009})
+    void testValidInsertMoney(double amount) {
+        vm.insertMoney(amount);
+        assertEquals(amount, vm.getBalance(), 0.01);
+    }
+
+    @ParameterizedTest 
+    @ValueSource(doubles = {-0.75, -0.001})
+    void testInvalidInsertMoney(double negativeAmount) {
+        assertThrows(VendingMachineException.class, () -> vm.insertMoney(negativeAmount));
     }
 
     @Test
-    void testMakePurchase() {
+    void testValidMakePurchase() {
         vm.insertMoney(1.75);
         assertTrue(vm.makePurchase("B"));
     }
 
+    @ParameterizedTest 
+    @ValueSource(strings = {"A", "B", "C"})
+    void testInvalidMakePurchase(String product) {
+        vm.addItem(pepsi, "C");
+        vm.removeItem("C");
+        vm.insertMoney(1.5);
+        assertFalse(vm.makePurchase(product));
+    }
+
     @Test
-    void testRemoveItem() {
+    void testValidRemoveItem() {
         assertEquals(drpepper, vm.removeItem("B"));
+    }
+
+    @Test
+    void testInvalidRemoveItem() {
+        assertThrows(VendingMachineException.class, () -> vm.removeItem("A"));
     }
 
     @Test
