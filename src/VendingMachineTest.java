@@ -15,6 +15,7 @@ public class VendingMachineTest {
     VendingMachineItem drpepper;
     VendingMachineItem pepsi;
     VendingMachineItem sprite;
+    VendingMachineItem nullItem;
 
     @BeforeEach
     void setUp() {
@@ -22,6 +23,7 @@ public class VendingMachineTest {
         coke = new VendingMachineItem("Coke", 1.5);
         drpepper = new VendingMachineItem("DrPepper", 1.75);
         pepsi = new VendingMachineItem("Pepsi", 0);
+        nullItem = new VendingMachineItem(null, 1.25);
         vm.addItem(drpepper, "B");
     }
 
@@ -41,6 +43,18 @@ public class VendingMachineTest {
         assertThrows(VendingMachineException.class, () -> vm.addItem(coke, "b"));
     }
 
+    /*
+    @Test
+    void testInvalidAddNullItem() {
+        assertThrows(VendingMachineException.class, () -> vm.addItem(nullItem, "A"));
+    }
+
+    @Test
+    void testInvalidAddNullItemNull() {
+        assertThrows(VendingMachineException.class, () -> vm.addItem(null, "A"));
+    }
+    */
+
     @Test
     void testGetBalance() {
         vm.insertMoney(2.0);
@@ -59,16 +73,16 @@ public class VendingMachineTest {
     }
 
     @ParameterizedTest 
-    @ValueSource(doubles = {1.0, 0.75, 0.009})
+    @ValueSource(doubles = {1.0, 0.75})
     void testValidInsertMoney(double amount) {
         vm.insertMoney(amount);
         assertEquals(amount, vm.getBalance(), 0.01);
     }
 
     @ParameterizedTest 
-    @ValueSource(doubles = {-0.75, -0.001})
-    void testInvalidInsertMoney(double negativeAmount) {
-        assertThrows(VendingMachineException.class, () -> vm.insertMoney(negativeAmount));
+    @ValueSource(doubles = {0.001, -0.75, -0.001})
+    void testInvalidInsertMoney(double invalidAmount) {
+        assertThrows(VendingMachineException.class, () -> vm.insertMoney(invalidAmount));
     }
 
     @Test

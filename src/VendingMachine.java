@@ -158,8 +158,9 @@ public class VendingMachine {
 	 *                                 amount is < 0
 	 */
 	public void insertMoney(double amount) throws VendingMachineException {
-		if (amount <= 0) // error: if (amount < 1)
+		if (amount <= 0 || amount - Math.round(amount * 100.0) / 100.0 > 0) {
 			throw new VendingMachineException(VendingMachine.INVALID_AMOUNT_MESSAGE);
+		}
 		this.balance += amount;
 	}
 

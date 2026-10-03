@@ -1,5 +1,6 @@
 | observed failure | test that exposed it | cause / source-code fault | how diagnosed fault | correction |
 |------------------|----------------------|---------------------------|---------------------|------------|
-| initialization of vending machine slots | textAddItem() -> out of bounds error | length 4 array has indexes 0 - 3 | for loop iterates i = 0 until i < array length |
-| insertMoney() minimum amount | testValidInsertMoney() and testInvalidInsertMoney() | if (amount < 1){throw exception} | read comments of code / documentation | if (amount <= 0){throw exception} |
-
+| initialization of vending machine slots | testAddItem() -> out of bounds error | length 4 array has indexes 0 - 3 | for loop iterates i = 0 until i < array length |
+| insertMoney() minimum amount | testValidInsertMoney() and testInvalidInsertMoney() | if (amount < 1){throw exception} | read comments of code / documentation | if (amount <= 0){throw error} |
+| insertMoney() fractions of cents | fixing insertMoney() in VendingMachine.java and testing testValidInsertMoney() and testInvalidInsertMoney() | no error thrown for fractions of cents | via unit testing | if (initial amount input minus rounded amount input by hundreths > 0){throw error} |
+| no exception thrown when item = null in addItem() | testInvalidAddNullItem(), testInvalidAddNullItemNull() | addItem() in VendingMachine.java, VendingMachineItem() in VendingMachineItem.java | via unit testing | throws error whenever item name = null (unresolved)|
