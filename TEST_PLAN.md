@@ -10,3 +10,8 @@
 | returnChange() | all | n/a | n/a | returns change as double | balance < 0 |
 
 boundary testing via parameter tests for both valid and invalid tests of insertMoney() and for testInvalidMakePurchase()
+
+The fault you introduced: allowed 0 to be valid as input for insertMoney()
+The test or tests that failed: testInvalidInsertMoney()
+The relevant JUnit failure message: "java.lang.AssertionError: expected VendingMachineException to be thrown, but nothing was thrown"
+Why the test detected the fault: only inputs less than 0 are thrown by removing the equal sign, the amount of 0 is an unexceptable input because it is not possible

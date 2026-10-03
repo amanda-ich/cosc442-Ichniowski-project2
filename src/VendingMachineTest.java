@@ -80,7 +80,7 @@ public class VendingMachineTest {
     }
 
     @ParameterizedTest 
-    @ValueSource(doubles = {0.001, -0.75, -0.001})
+    @ValueSource(doubles = {0, 0.001, -0.75, -0.001})
     void testInvalidInsertMoney(double invalidAmount) {
         assertThrows(VendingMachineException.class, () -> vm.insertMoney(invalidAmount));
     }
